@@ -25,6 +25,18 @@ func main() {
 		}
 	}
 
+	// Start health check server in a goroutine
+	go func() {
+		http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte("ok"))
+		})
+		log.Println("Health check server running on :8080")
+		if err := http.ListenAndServe(":8080", nil); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
 	token := os.Getenv("TELEGRAM_BOT_TOKEN")
 	openRouterKey := os.Getenv("OPENROUTER_API_KEY")
 	ownerUsername := os.Getenv("OWNER_USERNAME")
@@ -42,25 +54,21 @@ func main() {
 	bot.Handle(telebot.OnText, func(c telebot.Context) error {
 		msg := c.Message()
 
-		
 		if msg.Chat.Type == telebot.ChatPrivate {
 			return c.Send("sorry, not interested")
 		}
 
-		
 		if len(userMemory[msg.Sender.ID]) >= 10 {
 			userMemory[msg.Sender.ID] = userMemory[msg.Sender.ID][1:]
 		}
 		userMemory[msg.Sender.ID] = append(userMemory[msg.Sender.ID], msg.Sender.Username+": "+msg.Text)
 
-		
 		trollReply, err := fetchTrollReply(openRouterKey, msg.Text, msg.Sender.Username, ownerUsername)
 		if err != nil {
 			log.Println("OpenRouter error:", err)
 			return nil
 		}
 
-		
 		if isFiltered(trollReply) {
 			log.Println("Filtered response:", trollReply)
 			return nil
