@@ -18,9 +18,11 @@ import (
 var userMemory = make(map[int64][]string)
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	// toggle .env loading based on local env
+	if os.Getenv("LOCAL_ENV") == "1" {
+		if err := godotenv.Load(); err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
 
 	token := os.Getenv("TELEGRAM_BOT_TOKEN")
@@ -40,25 +42,25 @@ func main() {
 	bot.Handle(telebot.OnText, func(c telebot.Context) error {
 		msg := c.Message()
 
-		// Reject private chats
+		
 		if msg.Chat.Type == telebot.ChatPrivate {
 			return c.Send("sorry, not interested")
 		}
 
-		// Keep memory per user (max 10 lines)
+		
 		if len(userMemory[msg.Sender.ID]) >= 10 {
 			userMemory[msg.Sender.ID] = userMemory[msg.Sender.ID][1:]
 		}
 		userMemory[msg.Sender.ID] = append(userMemory[msg.Sender.ID], msg.Sender.Username+": "+msg.Text)
 
-		// Respond to all messages
+		
 		trollReply, err := fetchTrollReply(openRouterKey, msg.Text, msg.Sender.Username, ownerUsername)
 		if err != nil {
 			log.Println("OpenRouter error:", err)
 			return nil
 		}
 
-		// Filter AI meta replies
+		
 		if isFiltered(trollReply) {
 			log.Println("Filtered response:", trollReply)
 			return nil
