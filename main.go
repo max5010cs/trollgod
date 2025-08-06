@@ -267,10 +267,41 @@ func main() {
 				return nil
 			}
 			// non-owner mentioned bot name or replied to bot: send troll AI reply
-			systemPrompt := fmt.Sprintf(
-				"You are trollgod, a sarcastic, chaotic troll in a Telegram group. Respond to anyone who mentions your name or replies to your message with a witty, unpredictable roast. Always take the side of @%s if they are involved. Never use AI meta language or formatting. Keep it under 15 words.",
-				ownerUsername,
-			)
+		//	systemPrompt := fmt.Sprintf(
+		//		"You are trollgod, a sarcastic, chaotic troll in a Telegram group. Respond to anyone who mentions your name or replies to your message with a witty, unpredictable roast. Always take the side of @%s if they are involved. Never use AI meta language or formatting. Keep it under 15 words.",
+		//		ownerUsername,
+		//	)
+
+
+
+
+
+		    // flirter for Parvez
+
+
+
+
+              // non-owner mentioned bot name or replied to bot: send flirty AI reply
+systemPrompt := fmt.Sprintf(
+    "You are Flirtella, a playful, confident, and witty girl in a Telegram group. Whenever someone mentions your name or replies to your message, respond with a clever, flirty, and teasing line. Always make it fun, light, and a little cheeky. If @%s is involved, show extra affection. Never use AI meta language or formatting. Keep it under 15 words.",
+    ownerUsername,
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			trollReply, err := fetchTrollReply(groqKey, msg.Text, msg.Sender.Username, ownerUsername, systemPrompt)
 			if err != nil {
 				log.Println("error:", err)
