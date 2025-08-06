@@ -180,6 +180,34 @@ func main() {
 		return nil
 	})
 
+
+  
+//manual test
+// go func() {
+//     chatID := int64(-1002570393274) // Replace with your actual group chat ID
+//     _, err := bot.Send(&telebot.Chat{ID: chatID}, "Trollgod is out! Group too boring for my taste 💀")
+//     if err != nil {
+//         log.Printf("Leaving %v", err)
+//     } else {
+//         log.Printf("Leaving...")
+//     }
+//     err = bot.Leave(&telebot.Chat{ID: chatID})
+//     if err != nil {
+//         log.Printf("Manual leave error: %v", err)
+//     } else {
+//         log.Printf("Manual leave success")
+//     }
+// }()
+
+
+
+
+
+
+
+
+
+
 	// main message handler
 	bot.Handle(telebot.OnText, func(c telebot.Context) error {
 		msg := c.Message()
@@ -437,21 +465,3 @@ func isFiltered(reply string) bool {
 		strings.Contains(lower, "the user said")
 }
 
-// --- MANUAL TEST CODE FOR MESSAGING AND LEAVING ---
-// Uncomment and run this block inside main() to manually test sending and leaving:
-//
-// go func() {
-//     chatID := int64(-1002859097966) // Replace with your actual group chat ID
-//     _, err := bot.Send(&telebot.Chat{ID: chatID}, "Manual test: Bot will now leave this group!")
-//     if err != nil {
-//         log.Printf("Manual send error: %v", err)
-//     } else {
-//         log.Printf("Manual send success")
-//     }
-//     err = bot.Leave(&telebot.Chat{ID: chatID})
-//     if err != nil {
-//         log.Printf("Manual leave error: %v", err)
-//     } else {
-//         log.Printf("Manual leave success")
-//     }
-// }()
